@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details - RIC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(45deg, #00f2fe, #4facfe);
+            --text-gradient: linear-gradient(45deg, #ffffff, #b3e0ff);
+            --dark-overlay: linear-gradient(135deg, rgba(0,25,50,0.7) 0%, rgba(0,0,0,0.5) 100%);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --transition-smooth: all 0.3s cubic-bezier(0.6, 1, 0.3, 1);
+            --accent: #00f2fe;
+            --text-light: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #ffffff;
+            background: #000000;
+            overflow-x: hidden;
+            line-height: 1.3;
+        }
+
+        /* Background Slideshow */
+        .background-slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            filter: brightness(0.7) contrast(1.1);
+            transition: all 2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(1.02);
+            box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.3);
+            mix-blend-mode: normal;
+        }
+
+        .background-slideshow.active {
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: inset 0 0 0 1000px rgba(0, 100, 200, 0.1);
+        }
+
+        .background-slideshow::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--dark-overlay);
+            z-index: 1;
+        }
+
+        /* Improved Header Styles */
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            transition: var(--transition-smooth);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .header.scrolled {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 10, 20, 0.7);
+            padding: 0.8rem 5%;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            z-index: 101;
+            
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo span {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Mobile menu button */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 101;
+        }
+        .nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav ul {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover::after,
+        .nav a.active::after {
+            width: 100%;
+        }
+
+        .nav a.active {
+            color: #00f2fe;
+        }
+
+        /* Mobile menu styles */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0.8rem 5%;
+                justify-content: space-between;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: rgba(0, 10, 20, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.3s ease;
+                z-index: 100;
+                padding-top: 5rem;
+            }
+            
+            .nav.active {
+                right: 0;
+            }
+            
+            .nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+                width: 100%;
+            }
+            
+            .nav a {
+                font-size: 1.2rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Project Hero Section */
+        .project-hero {
+            padding: 7rem 5% 3rem;
+            text-align: center;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 2rem;
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            max-width: 95%;
+            margin: 0 auto;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+        }
+
+        .project-title {
+            font-size: clamp(1.8rem, 6vw, 3.5rem);
+            margin: 0 0 1.5rem;
+            line-height: 1.1;
+            background: var(--text-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .project-subtitle {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: 300;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+        }
+
+        .project-summary {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Slideshow */
+        .hero-slideshow {
+            width: 95%;
+            max-width: 800px;
+            height: auto;
+            aspect-ratio: 16/9;
+            max-height: 500px;
+            margin: 2rem auto 0;
+            border-radius: 8px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-slide-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 3;
+        }
+
+        .hero-slide-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hero-slide-dot.active {
+            background: var(--accent);
+            transform: scale(1.2);
+        }
+
+        /* Project Details */
+        .project-details {
+            max-width: 1000px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: rgba(73, 73, 73, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            width: 95%;
+        }
+
+        .project-details h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+            color: var(--accent);
+        }
+
+        .project-details h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary-gradient);
+        }
+
+        .project-details p {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Project Info Grid */
+        .project-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem auto;
+            max-width: 1000px;
+            padding: 0 5%;
+            width: 95%;
+        }
+
+        .info-card {
+            background: rgba(73, 73, 73, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            transition: var(--transition-smooth);
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
+        }
+
+        .info-card h3 {
+            font-size: 1.3rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            color: var(--accent);
+        }
+
+        .info-card h3 i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tech-item {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(0, 242, 254, 0.3);
+        }
+
+        .project-links a {
+            display: inline-flex;
+            align-items: center;
+            color: var(--accent);
+            text-decoration: none;
+            margin-bottom: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .project-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .project-links a i {
+            margin-right: 8px;
+        }
+
+        /* Team Section - Grid Layout */
+        .team-section {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 5%;
+            text-align: center;
+            width: 95%;
+        }
+
+        .team-section h2 {
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .team-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary-gradient);
+        }
+
+        .team-grid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-row {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .team-member {
+            text-align: center;
+            background: rgba(73, 73, 73, 0.7);
+            backdrop-filter: blur(5px);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            transition: var(--transition-smooth);
+            width: calc(50% - 2rem);
+            min-width: 200px;
+            max-width: 250px;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
+        }
+
+        .member-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(0, 242, 254, 0.3);
+            margin: 0 auto 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        .team-member:hover .member-photo {
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .member-name {
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0.5rem 0 0.2rem;
+            font-size: 1.1rem;
+        }
+
+        .member-role {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 5%;
+            position: relative;
+            z-index: 5;
+            background: rgba(0, 10, 20, 0.7);
+            backdrop-filter: blur(5px);
+            margin-top: 3rem;
+        }
+
+        .footer p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Image optimization */
+        .lazy-load {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lazy-load.loaded {
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .team-member {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .hero-content {
+                padding: 1.5rem;
+            }
+            
+            .project-details, .info-card {
+                padding: 1.5rem;
+            }
+            
+            .project-info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav a {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .project-title {
+                font-size: 2rem;
+            }
+            
+            .hero-slideshow {
+                height: 200px;
+            }
+            
+            .project-hero {
+                padding: 5rem 5% 2rem;
+            }
+            
+            .member-photo {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .member-name {
+                font-size: 1rem;
+            }
+
+            .member-role {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <script src="redirect.js"></script>
+    <div class="background-slideshow"></div>
+    
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <h1>RIC</h1>
+                <span>Robotics Intelligence Centre</span>
+            </div>
+            <button class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="nav" id="nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="crewmembers.html">Crew Members</a></li>
+                    <li><a href="projects.html" class="active">Projects</a></li>
+                    <li><a href="Achivements.html">Achievements</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="project-hero">
+            <div class="hero-content">
+                <h1 class="project-title">Autonomous Industrial Manipulator</h1>
+                <p class="project-subtitle">Revolutionizing Manufacturing with AI-Powered Robotics</p>
+                <p class="project-summary">Developing vision-guided robotic arms for flexible manufacturing with self-learning capabilities to adapt to new tasks without reprogramming, reducing setup time by 70% and increasing production efficiency.</p>
+            </div>
+        </section>
+
+        <div class="hero-slideshow">
+            <!-- Slides will be dynamically inserted here by JavaScript -->
+        </div>
+
+        <section class="project-details">
+            <h2>Project Overview</h2>
+            <p>The Autonomous Industrial Manipulator project represents a significant leap forward in manufacturing automation. Traditional industrial robots require extensive programming for each specific task, making them inflexible and costly to reconfigure for new products. Our solution integrates advanced computer vision with machine learning algorithms to create robotic arms that can learn new tasks through observation and minimal demonstration.</p>
+            
+            <p>At the core of our system is a proprietary neural network architecture that enables real-time object recognition, pose estimation, and motion planning. The manipulator can identify workpieces, understand their orientation, and determine the optimal grasping strategy without explicit programming. This capability reduces changeover time between product lines from hours to minutes, making small-batch manufacturing economically viable.</p>
+            
+            <p>The project has demonstrated remarkable results in pilot implementations, showing a 45% reduction in programming time, 30% improvement in cycle times through optimized motion paths, and near-zero defect rates due to the system's ability to detect and compensate for minor variations in workpiece positioning. Future development will focus on multi-arm coordination and integration with IoT-enabled smart factories.</p>
+        </section>
+
+        <div class="project-info-grid">
+            <div class="info-card">
+                <h3><i class="fas fa-code"></i> Technology Stack</h3>
+                <div class="tech-stack">
+                    <span class="tech-item">ROS (Robot Operating System)</span>
+                    <span class="tech-item">TensorFlow</span>
+                    <span class="tech-item">Python</span>
+                    <span class="tech-item">OpenCV</span>
+                    <span class="tech-item">C++</span>
+                    <span class="tech-item">Point Cloud Library</span>
+                    <span class="tech-item">Gazebo Simulation</span>
+                    <span class="tech-item">Industrial IoT</span>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3><i class="fas fa-info-circle"></i> Project Details</h3>
+                <p><strong>Duration:</strong> January 2022 - Present</p>
+                <p><strong>Team Size:</strong> 6 members</p>
+                <p><strong>Status:</strong> Pilot Phase</p>
+                
+                <div class="project-links">
+                    <a href="#" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a>
+                    <a href="#" target="_blank"><i class="fas fa-file-pdf"></i> Project Whitepaper</a>
+                    <a href="#" target="_blank"><i class="fas fa-video"></i> Demonstration Video</a>
+                </div>
+            </div>
+        </div>
+
+        <section class="team-section">
+            <h2>Project Team</h2>
+            <div class="team-grid">
+                <!-- First row - 3 members -->
+                <div class="team-row">
+                    <div class="team-member">
+                        <img src="pigeon.jpeg" alt="Team Member" class="member-photo lazy-load" loading="lazy">
+                        <h3 class="member-name">Dr. Sarah Chen</h3>
+                        <p class="member-role">Lead Robotics Engineer</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Team Member" class="member-photo lazy-load" loading="lazy">
+                        <h3 class="member-name">Michael Rodriguez</h3>
+                        <p class="member-role">Computer Vision Specialist</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Team Member" class="member-photo lazy-load" loading="lazy">
+                        <h3 class="member-name">Priya Patel</h3>
+                        <p class="member-role">AI/ML Engineer</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2023 Robotics Intelligence Centre. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#">Research Papers</a>
+            <a href="#">Careers</a>
+            <a href="#">Partnerships</a>
+            <a href="#">Newsroom</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Background slideshow images (optimized with smaller sizes)
+            const backgroundImages = [
+                'https://images.unsplash.com/photo-1601134467661-3d775b999c8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                'https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'
+            ];
+            
+            const bgElement = document.querySelector('.background-slideshow');
+            let currentBgIndex = 0;
+            
+            // Project slideshow images (optimized with smaller sizes)
+            const projectSlides = [
+                'https://images.unsplash.com/photo-1593491203371-2f45ef5c6eec?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                'https://images.unsplash.com/photo-1603732551681-2e91159ca9df?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+                'https://images.unsplash.com/photo-1603732551658-5fabbafa84eb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'
+            ];
+            
+            // Initialize background slideshow
+            function changeBackground() {
+                gsap.to(bgElement, {
+                    duration: 1,
+                    boxShadow: "inset 0 0 0 1000px rgba(0, 150, 255, 0.3)",
+                    onComplete: () => {
+                        currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                        bgElement.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
+                        
+                        gsap.fromTo(bgElement,
+                            { opacity: 0, boxShadow: "inset 0 0 0 1000px rgba(200, 50, 0, 0.3)" },
+                            {
+                                duration: 1.5,
+                                opacity: 1,
+                                boxShadow: "inset 0 0 0 1000px rgba(0, 0, 0, 0.2)",
+                                ease: "power2.out"
+                            }
+                        );
+                    }
+                });
+            }
+            
+            // Set initial background
+            bgElement.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
+            gsap.to(bgElement, { duration: 1, opacity: 0.8 });
+            
+            // Change background every 5 seconds
+            setInterval(changeBackground, 5000);
+            
+            // Initialize project slideshow
+            const slideshow = document.querySelector('.hero-slideshow');
+            const dotsContainer = document.createElement('div');
+            dotsContainer.className = 'hero-slide-nav';
+            slideshow.appendChild(dotsContainer);
+            
+            projectSlides.forEach((slide, index) => {
+                // Create slide
+                const slideDiv = document.createElement('div');
+                slideDiv.className = `hero-slide ${index === 0 ? 'active' : ''}`;
+                slideDiv.style.backgroundImage = `url(${slide})`;
+                slideshow.insertBefore(slideDiv, slideshow.firstChild);
+                
+                // Create dot
+                const dotDiv = document.createElement('div');
+                dotDiv.className = `hero-slide-dot ${index === 0 ? 'active' : ''}`;
+                dotDiv.onclick = () => showHeroSlide(index);
+                dotsContainer.appendChild(dotDiv);
+            });
+            
+            // Project slideshow functionality
+            let currentHeroSlide = 0;
+            let heroInterval;
+            
+            function showHeroSlide(n) {
+                const slides = document.querySelectorAll('.hero-slide');
+                const dots = document.querySelectorAll('.hero-slide-dot');
+                
+                if (slides.length === 0 || dots.length === 0) return;
+                
+                slides[currentHeroSlide].classList.remove('active');
+                if (dots[currentHeroSlide]) {
+                    dots[currentHeroSlide].classList.remove('active');
+                }
+                
+                currentHeroSlide = n;
+                
+                slides[currentHeroSlide].classList.add('active');
+                if (dots[currentHeroSlide]) {
+                    dots[currentHeroSlide].classList.add('active');
+                }
+                
+                clearInterval(heroInterval);
+                heroInterval = setInterval(() => {
+                    showHeroSlide((currentHeroSlide + 1) % projectSlides.length);
+                }, 5000);
+            }
+            
+            // Start project slideshow
+            heroInterval = setInterval(() => {
+                showHeroSlide((currentHeroSlide + 1) % projectSlides.length);
+            }, 5000);
+            
+            // Header animation on scroll
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('.header');
+                if (window.scrollY > 50) {
+                    gsap.to(header, { 
+                        duration: 0.5,
+                        backdropFilter: 'blur(10px)',
+                        backgroundColor: 'rgba(0, 10, 20, 0.7)'
+                    });
+                } else {
+                    gsap.to(header, { 
+                        duration: 0.5,
+                        backdropFilter: 'blur(0px)',
+                        backgroundColor: 'transparent'
+                    });
+                }
+            });
+            
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menu-toggle');
+            const nav = document.getElementById('nav');
+            
+            menuToggle.addEventListener('click', function() {
+                nav.classList.toggle('active');
+                menuToggle.innerHTML = nav.classList.contains('active') 
+                    ? '<i class="fas fa-times"></i>' 
+                    : '<i class="fas fa-bars"></i>';
+            });
+
+            // Close menu when clicking on a link
+            document.querySelectorAll('.nav a').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        nav.classList.remove('active');
+                        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                });
+            });
+            
+            // Animate elements on page load
+            gsap.from('.hero-content', {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                ease: "power3.out"
+            });
+            
+            gsap.from('.hero-slideshow', {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                delay: 0.3,
+                ease: "power3.out"
+            });
+
+            // Lazy load images
+            const lazyImages = document.querySelectorAll('.lazy-load');
+            
+            const lazyLoad = (target) => {
+                const io = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src || img.src;
+                            img.classList.add('loaded');
+                            observer.unobserve(img);
+                        }
+                    });
+                });
+                
+                io.observe(target);
+            };
+            
+            lazyImages.forEach(lazyLoad);
+        });
+    </script>
+</body>
+</html>

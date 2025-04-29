@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIC - Achievements</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <style>
+        /* ===== RESET & BASE STYLES ===== */
+        :root {
+            --primary-gradient: linear-gradient(45deg, #00f2fe, #4facfe);
+            --text-gradient: linear-gradient(45deg, #ffffff, #b3e0ff);
+            --dark-overlay: linear-gradient(135deg, rgba(0,25,50,0.7) 0%, rgba(0,0,0,0.5) 100%);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --transition-smooth: all 0.3s cubic-bezier(0.6, 1, 0.3, 1);
+            --accent-color: #00f2fe;
+            --text-color: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-color);
+            background: #000000;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ===== BACKGROUND SLIDESHOW ===== */
+        .background-slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            filter: brightness(0.7) contrast(1.1);
+            transition: all 2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(1.02);
+            box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.3);
+            mix-blend-mode: normal;
+        }
+
+        .background-slideshow.active {
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: inset 0 0 0 1000px rgba(0, 100, 200, 0.1);
+        }
+
+        .background-slideshow::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--dark-overlay);
+            z-index: 1;
+        }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            position: fixed;
+            width: 100%;
+            height: 100px;
+            z-index: 100;
+            transition: var(--transition-smooth);
+        }
+
+        .header.scrolled {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 10, 20, 0.7);
+            padding: 1rem 5%;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            z-index: 101;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo span {
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Mobile menu button */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover::after,
+        .nav a.active::after {
+            width: 100%;
+        }
+
+        .nav a.active {
+            color: var(--accent-color);
+        }
+
+        /* Mobile menu styles */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: rgba(0, 10, 20, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.3s ease;
+                z-index: 100;
+            }
+            
+            .nav.active {
+                right: 0;
+            }
+            
+            .nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 2rem;
+            }
+            
+            .header {
+                padding: 1.5rem 5%;
+            }
+            
+            .header.scrolled {
+                padding: 1rem 5%;
+            }
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .achievements-content {
+            padding-top: 180px;
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 100px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            background: var(--text-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .section-intro {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* Timeline Styles */
+        .timeline-container {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: var(--primary-gradient);
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        }
+
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-gradient);
+            z-index: 2;
+            opacity: 0;
+            animation: pulse 3s infinite;
+        }
+
+        .milestone {
+            position: relative;
+            width: calc(50% - 60px);
+            margin-bottom: 4rem;
+            padding: 0 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
+        }
+
+        .milestone:nth-child(odd) {
+            margin-right: auto;
+            text-align: right;
+        }
+
+        .milestone:nth-child(even) {
+            margin-left: auto;
+            text-align: left;
+        }
+
+        .milestone-content {
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            position: relative;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            transition: var(--transition-smooth);
+            backdrop-filter: blur(5px);
+        }
+
+        .milestone-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 242, 254, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .milestone h3 {
+            color: var(--accent-color);
+            font-family: 'Roboto Slab', serif;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .milestone p {
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            text-align: left;
+        }
+
+        .milestone-meta {
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .milestone-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--accent-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            border: 1px solid rgba(0, 242, 254, 0.3);
+        }
+
+        .milestone-icon {
+            color: var(--accent-color);
+            margin-right: 0.5rem;
+        }
+
+        /* Dot on timeline */
+        .milestone::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(0, 242, 254, 0.3), 0 0 10px rgba(0, 242, 254, 0.5);
+            z-index: 3;
+            transform: scale(0);
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .milestone.active::after {
+            transform: scale(1);
+        }
+
+        .milestone:nth-child(odd)::after {
+            right: -10px;
+        }
+
+        .milestone:nth-child(even)::after {
+            left: -10px;
+        }
+
+        /* Glow animation */
+        @keyframes pulse {
+            0% {
+                opacity: 0;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 3rem 5%;
+            position: relative;
+            z-index: 5;
+            background: rgba(0, 10, 20, 0.7);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 242, 254, 0.1);
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
+
+            .timeline-line {
+                left: 30px;
+            }
+            
+            .milestone,
+            .milestone:nth-child(even) {
+                width: calc(100% - 80px);
+                margin-left: 80px;
+                text-align: left;
+                padding: 0;
+            }
+            
+            .milestone-content {
+                margin-top: 0;
+            }
+
+            .milestone::after {
+                left: -10px;
+                right: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .section-intro {
+                font-size: 1rem;
+            }
+
+            .milestone h3 {
+                font-size: 1.3rem;
+            }
+            
+            .milestone,
+            .milestone:nth-child(even) {
+                width: calc(100% - 60px);
+                margin-left: 60px;
+            }
+            
+            .milestone-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script src="redirect.js"></script>
+    <div class="background-slideshow"></div>
+    
+    <header class="header">
+        <div class="logo">
+            <h1>RIC</h1>
+            <span>Robotics Intelligence Centre</span>
+        </div>
+        
+        <button class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav class="nav" id="nav">
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="crewmembers.html">Crew Members</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="#" class="active">Achievements</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="achievements-content">
+        <div class="section-title">
+            <h2>Our Journey</h2>
+            <div class="section-intro">
+                <p>At the Robotics Intelligence Centre, our passion for innovation and technology drives everything we do. Over the years, our dedication has earned us numerous accolades, reflecting our commitment to excellence in robotics and automation.</p>
+            </div>
+        </div>
+        
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+            <!-- Milestones will be dynamically inserted here -->
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">Research Papers</a>
+            <a href="#">Careers</a>
+            <a href="#">Partnerships</a>
+            <a href="#">Newsroom</a>
+        </div>
+        <p>&copy; 2023 Robotics Intelligence Centre. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Milestone data as objects
+        const milestonesData = [
+            {
+                title: "1st place in Sangam'25 - Industrial Automation",
+                description: "Pragyan'25, NIT Trichy",
+                icon: "fas fa-project-diagram",
+                date: "Project SLITHER | February 2025",
+                badges: ["1st Place", "Industrial Automation"]
+            },
+            {
+                title: "Best Robotics Innovation Award",
+                description: "International Robotics Conference",
+                icon: "fas fa-trophy",
+                date: "Project AURORA | November 2024",
+                badges: ["Innovation", "Global"]
+            },
+            {
+                title: "Technology Excellence Award",
+                description: "National Tech Symposium",
+                icon: "fas fa-medal",
+                date: "Project HELIX | March 2023",
+                badges: ["Excellence", "Research"]
+            },
+            {
+                title: "AI Research Grant Award",
+                description: "Department of Science & Technology",
+                icon: "fas fa-microscope",
+                date: "Project NEURON | September 2022",
+                badges: ["Research", "Grant"]
+            },
+            {
+                title: "Young Innovators Recognition",
+                description: "TechStars Startup Week",
+                icon: "fas fa-lightbulb",
+                date: "Project SPARK | May 2021",
+                badges: ["Startup", "Recognition"]
+            }
+        ];
+
+        // Background images for slideshow
+        const backgroundImages = [
+            'images/im1.jpg',
+            'images/im2.jpg',
+            'images/im3.jpg',
+            'images/im4.jpg'
+        ];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize background slideshow
+            initSlideshow();
+            
+            // Generate milestones from data
+            generateMilestones();
+            
+            // Set up scroll animation for milestones
+            setupScrollAnimations();
+            
+            // Header scroll effect
+            const header = document.querySelector('.header');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menu-toggle');
+            const nav = document.getElementById('nav');
+            
+            menuToggle.addEventListener('click', function() {
+                nav.classList.toggle('active');
+                menuToggle.innerHTML = nav.classList.contains('active') 
+                    ? '<i class="fas fa-times"></i>' 
+                    : '<i class="fas fa-bars"></i>';
+            });
+
+            // Close menu when clicking on a link
+            document.querySelectorAll('.nav a').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        nav.classList.remove('active');
+                        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                });
+            });
+        });
+        
+        // Generate milestones from data
+        function generateMilestones() {
+            const timelineContainer = document.querySelector('.timeline-container');
+            
+            milestonesData.forEach((milestone, index) => {
+                const milestoneElement = document.createElement('div');
+                milestoneElement.className = `milestone ${index % 2 === 0 ? 'odd' : 'even'}`;
+                
+                // Create badges HTML
+                const badgesHTML = milestone.badges.map(badge => 
+                    `<span class="milestone-badge">${badge}</span>`
+                ).join('');
+                
+                milestoneElement.innerHTML = `
+                    <div class="milestone-content">
+                        <h3>${milestone.title}</h3>
+                        <p>${milestone.description}</p>
+                        <div class="milestone-meta">
+                            <i class="${milestone.icon} milestone-icon"></i>
+                            <span>${milestone.date}</span>
+                        </div>
+                        ${badgesHTML}
+                    </div>
+                `;
+                
+                timelineContainer.appendChild(milestoneElement);
+            });
+        }
+        
+        // Set up scroll animations for milestones
+        function setupScrollAnimations() {
+            const milestones = document.querySelectorAll('.milestone');
+            const timelineLine = document.querySelector('.timeline-line');
+            
+            // Function to check if element is in center viewport
+            function isInCenterViewport(el) {
+                const rect = el.getBoundingClientRect();
+                const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+                const elementTop = rect.top;
+                const elementBottom = rect.bottom;
+                
+                // Check if element is in the center 60% of the viewport
+                return (
+                    elementTop <= viewportHeight * 0.7 &&
+                    elementBottom >= viewportHeight * 0.3
+                );
+            }
+            
+            // Function to handle scroll events
+            function handleScroll() {
+                milestones.forEach((milestone, index) => {
+                    if (isInCenterViewport(milestone) && !milestone.classList.contains('active')) {
+                        milestone.classList.add('active');
+                        
+                        // Animate the milestone
+                        gsap.to(milestone, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.8,
+                            ease: "power2.out",
+                            onComplete: function() {
+                                // Animate the dot
+                                gsap.to(milestone.querySelector('::after'), {
+                                    scale: 1,
+                                    duration: 0.5,
+                                    ease: "back.out"
+                                });
+                                
+                                // Animate timeline glow if last milestone
+                                if (index === milestones.length - 1) {
+                                    animateTimelineGlow();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+            
+            // Initial check in case some milestones are already visible
+            handleScroll();
+            
+            // Add scroll event listener
+            window.addEventListener('scroll', handleScroll);
+        }
+        
+        // Animate timeline glow effect
+        function animateTimelineGlow() {
+            const timelineLine = document.querySelector('.timeline-line');
+            
+            // Create glow element
+            const glow = document.createElement('div');
+            glow.className = 'timeline-glow';
+            glow.style.position = 'absolute';
+            glow.style.top = '0';
+            glow.style.left = '0';
+            glow.style.width = '100%';
+            glow.style.height = '100%';
+            glow.style.background = 'var(--primary-gradient)';
+            glow.style.zIndex = '2';
+            glow.style.opacity = '0';
+            glow.style.transformOrigin = 'center';
+            
+            timelineLine.appendChild(glow);
+            
+            // Animate glow
+            gsap.to(glow, {
+                opacity: 0.8,
+                duration: 1,
+                yoyo: true,
+                repeat: 3,
+                ease: "sine.inOut",
+                onComplete: () => {
+                    // Remove glow element after animation
+                    timelineLine.removeChild(glow);
+                    
+                    // Continuous subtle pulse
+                    gsap.to(timelineLine, {
+                        boxShadow: '0 0 15px rgba(0, 242, 254, 0.7)',
+                        duration: 2,
+                        yoyo: true,
+                        repeat: -1,
+                        ease: "sine.inOut"
+                    });
+                }
+            });
+        }
+        
+        // Initialize background slideshow
+        function initSlideshow() {
+            const bgElement = document.querySelector('.background-slideshow');
+            let currentBgIndex = 0;
+            
+            // Preload images
+            backgroundImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+            
+            function changeBackground() {
+                // Fade out current background
+                gsap.to(bgElement, {
+                    opacity: 0,
+                    duration: 1,
+                    onComplete: () => {
+                        // Change background image
+                        currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                        bgElement.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
+                        
+                        // Fade in new background
+                        gsap.to(bgElement, {
+                            opacity: 1,
+                            duration: 1,
+                            ease: "power2.out"
+                        });
+                    }
+                });
+            }
+            
+            // Set initial background
+            bgElement.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
+            gsap.to(bgElement, { 
+                opacity: 1,
+                duration: 1 
+            });
+            
+            // Change background every 5 seconds
+            setInterval(changeBackground, 5000);
+        }
+    </script>
+</body>
+</html>

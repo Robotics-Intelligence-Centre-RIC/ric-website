@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIC - Crew Members</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;700&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+    <style>
+        /* ===== RESET & BASE STYLES ===== */
+        :root {
+            --primary-gradient: linear-gradient(45deg, #00f2fe, #4facfe);
+            --text-gradient: linear-gradient(45deg, #ffffff, #b3e0ff);
+            --dark-overlay: linear-gradient(135deg, rgba(0,25,50,0.7) 0%, rgba(0,0,0,0.5) 100%);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --transition-smooth: all 0.3s cubic-bezier(0.6, 1, 0.3, 1);
+            --batch-color: rgba(0, 242, 254, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #ffffff;
+            background: #000000;
+            overflow-x: hidden;
+            line-height: 1.3;
+        }
+
+        /* ===== BACKGROUND SLIDESHOW ===== */
+        .background-slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            filter: brightness(0.7) contrast(1.1);
+            transition: all 2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(1.02);
+            box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.3);
+            mix-blend-mode: normal;
+        }
+
+        .background-slideshow.active {
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: inset 0 0 0 1000px rgba(0, 100, 200, 0.1);
+        }
+
+        .background-slideshow::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--dark-overlay);
+            z-index: 1;
+        }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            position: fixed;
+            width: 100%;
+            height: 100px;
+            z-index: 100;
+            transition: var(--transition-smooth);
+        }
+
+        .header.scrolled {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 10, 20, 0.7);
+            padding: 1rem 5%;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            z-index: 101;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo span {
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Mobile menu button */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover::after,
+        .nav a.active::after {
+            width: 100%;
+        }
+
+        .nav a.active {
+            color: #00f2fe;
+        }
+
+        /* ===== MOBILE MENU STYLES ===== */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: rgba(0, 10, 20, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.3s ease;
+                z-index: 100;
+            }
+            
+            .nav.active {
+                right: 0;
+            }
+            
+            .nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 2rem;
+            }
+            
+            .header {
+                padding: 1.5rem 5%;
+            }
+            
+            .header.scrolled {
+                padding: 1rem 5%;
+            }
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .crew-content {
+            padding-top: 180px;
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 100px;
+        }
+
+        .team-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .team-title h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            background: var(--text-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .team-intro {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .team-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            gap: 20px;
+        }
+
+        .team-tab {
+            padding: 12px 30px;
+            background: rgba(0, 242, 254, 0.1);
+            color: #00f2fe;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+        }
+
+        .team-tab.active {
+            background: rgba(0, 242, 254, 0.2);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+        }
+
+        .team-tab:hover {
+            background: rgba(0, 242, 254, 0.3);
+        }
+
+        .team-container {
+            display: none;
+        }
+
+        .team-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .team-grid {
+            display: grid;
+            margin-left: 80px;
+            margin-right: 80px;
+            grid-template-columns: repeat(3, minmax(300px, 1fr));
+            gap: 40px;
+            padding: 0 20px;
+            justify-items: center;
+        }
+
+        /* ===== FLIP CARD STYLES ===== */
+        .member-card {
+            position: relative;
+            width: 100%;
+            max-width: 270px;
+            height: 350px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .member-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-front {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.8);
+        }
+
+        .card-front-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 25px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+        }
+
+        .member-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Roboto Slab', serif;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .member-role {
+            font-size: 1rem;
+            opacity: 0.9;
+            color: #b3e0ff;
+            margin-bottom: 5px;
+        }
+
+        .member-batch {
+            font-size: 0.85rem;
+            color: var(--batch-color);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .card-back {
+            background: rgba(0, 5, 15, 0.98);
+            transform: rotateY(180deg);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .member-bio {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 15px 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .member-social {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .member-social a {
+            color: white;
+            font-size: 1.2rem;
+            transition: var(--transition-smooth);
+        }
+
+        .member-social a:hover {
+            color: #00f2fe;
+            transform: translateY(-3px);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 3rem 5%;
+            position: relative;
+            z-index: 5;
+            background: rgba(0, 10, 20, 0.7);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 242, 254, 0.1);
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #00f2fe;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1200px) {
+            .team-grid {
+                grid-template-columns: repeat(2, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+                margin-left: 20px;
+                margin-right: 20px;
+            }
+
+            .crew-content {
+                padding-top: 150px;
+            }
+
+            /* Change flip to click on mobile */
+            .member-card {
+                perspective: none;
+            }
+            
+            .member-card .card-inner {
+                transition: transform 0.6s;
+            }
+            
+            .member-card.flipped .card-inner {
+                transform: rotateY(180deg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .team-title h2 {
+                font-size: 2.2rem;
+            }
+
+            .team-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script src="redirect.js"></script>
+    <div class="background-slideshow"></div>
+    
+    <header class="header">
+        <div class="logo">
+            <h1>RIC</h1>
+            <span>Robotics Intelligence Centre</span>
+        </div>
+        
+        <button class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav class="nav" id="nav">
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="crewmembers.html" class="active">Crew Members</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="Achivements.html">Achievements</a></li>
+               
+            </ul>
+        </nav>
+    </header>
+
+    <main class="crew-content">
+        <div class="team-title">
+            <h2>Our Team</h2>
+            <div class="team-intro">
+                <p>The Robotics Intelligence Centre brings together brilliant minds from diverse disciplines to push the boundaries of intelligent robotics. Our team consists of passionate engineers, researchers, and innovators who collaborate to develop cutting-edge robotic solutions.</p>
+            </div>
+        </div>
+        
+        <div class="team-tabs">
+            <div class="team-tab active" data-tab="members">Members</div>
+            <div class="team-tab" data-tab="advisors">Faculty Advisors</div>
+        </div>
+        
+        <div class="team-container active" id="members">
+            <div class="team-grid" id="members-grid"></div>
+        </div>
+        
+        <div class="team-container" id="advisors">
+            <div class="team-grid" id="advisors-grid"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">Research Papers</a>
+            <a href="#">Careers</a>
+            <a href="#">Partnerships</a>
+            <a href="#">Newsroom</a>
+        </div>
+        <p>&copy; 2023 Robotics Intelligence Centre. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Background images for slideshow
+        const backgroundImages = [
+            'images/im1.jpg',
+            'images/im2.jpg',
+            'images/im3.jpg',
+            'images/im4.jpg'
+        ];
+
+        // Team data with batch years added
+        const teamData = {
+            members: [
+                {
+                    name: "Rahul",
+                    role: "Lead Robotics Engineer",
+                    batch: "2026",
+                    image: "images/im1.jpg",
+                    bio: "Expert in robotic systems integration with 10+ years of experience. Specializes in autonomous navigation and robotic manipulation. Developed our core robotic operating system.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+                {
+                    name: "Udhay karthick",
+                    role: "AI Research Scientist",
+                    batch: "2027",
+                    image: "",
+                    bio: "Expert in machine learning for robotic perception. Developed our award-winning object recognition system. Holds MSc in Computer Science from Stanford with focus on neural networks.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+                {
+                    name: "Pravin Kumar",
+                    role: "Systems Architect",
+                    batch: "2025",
+                    image: "/images/members/pravin.jpg",
+                    bio: "Designs the core architecture for our robotic systems. Former SpaceX engineer with expertise in embedded systems and real-time computing. Leads our reliability engineering team.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+                {
+                    name: "Ramanidharan",
+                    role: "Human-Robot Interaction",
+                    batch: "2026",
+                    image: "/images/members/ramani.jpg",
+                    bio: "Focuses on making robots more intuitive for human interaction. Psychology and robotics background. Developed our natural language interface and emotional recognition systems.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+                {
+                    name: "Sachin",
+                    role: "Computer Vision Specialist",
+                    batch: "2027",
+                    image: "/images/members/sachin.jpg",
+                    bio: "Develops advanced computer vision algorithms for robotic navigation and object recognition. Previously worked on autonomous vehicle perception systems at Waymo.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+        
+            {
+                name: "Lakshimi Narayanan",
+                role: "Robotics Software Engineer",
+                batch: "2025",
+                image: "/images/members/d.jpg",
+                bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
+                linkedin: "#",
+                github: "#",
+                email: "#"
+            },  {
+                name: "Kishore T",
+                role: "Robotics Software Engineer",
+                batch: "2025",
+                image: "/images/members/d.jpg",
+                bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
+                linkedin: "#",
+                github: "#",
+                email: "#"
+            },
+            {
+                    name: "Phurnes",
+                    role: "Robotics Software Engineer",
+                    batch: "2025",
+                    image: "/images/members/phurnes.jpg",
+                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+                {
+                    name: "Sowmiya M",
+                    role: "Robotics Software Engineer",
+                    batch: "2025",
+                    image: "/images/members/sowmiya.jpg",
+                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+                {
+                    name: "Preethi K",
+                    role: "Robotics Software Engineer",
+                    batch: "2025",
+                    image: "/images/members/preethi1.jpg",
+                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+                
+                {
+                    name: "Balahariharan S",
+                    role: "Robotics Software Engineer",
+                    batch: "2025",
+                    image: "/images/members/bala.jpg",
+                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+                {
+                    name: "Kavikumar",
+                    role: "Robotics Software Engineer",
+                    batch: "2025",
+                    image: "/images/members/kavi.jpg",
+                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },   
+                {
+                    name: "Arunesh",
+                    role: "Robotics Software Engineer",
+                    batch: "2025",
+                    image: "/images/members/arunesh.jpg",
+                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+                {
+                    name: "Bharathkumar J A",
+                    role: "Robotics Software Engineer",
+                    batch: "2025",
+                    image: "/images/members/.jpg",
+                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+                {
+                    name: "Kishorekumar A",
+                    role: "Robotics Software Engineer",
+                    batch: "2025",
+                    image: "/images/members/d.jpg",
+                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                }
+            ],
+            advisors: [
+                {
+                    name: "Dr. Robert Langley",
+                    role: "Senior Faculty Advisor",
+                    image: "images/advisor1.jpg",
+                    bio: "Professor of Robotics at MIT with 25+ years experience in autonomous systems. Provides strategic guidance on our research directions and connects RIC with academic partners worldwide.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+                {
+                    name: "Dr. Elena Petrova",
+                    role: "AI Research Advisor",
+                    image: "images/advisor2.jpg",
+                    bio: "Head of Computer Science Department at Stanford. Advises on our machine learning approaches and helps integrate the latest AI breakthroughs into our robotic systems.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                },
+                {
+                    name: "Dr. James Chen",
+                    role: "Mechanical Engineering Advisor",
+                    image: "images/advisor3.jpg",
+                    bio: "Professor of Mechanical Engineering at Caltech with expertise in robotic mechanisms and bio-inspired design. Guides our hardware development team.",
+                    linkedin: "#",
+                    github: "#",
+                    email: "#"
+                }
+            ]
+        };
+
+        // Create member card with batch year
+        function createMemberCard(member) {
+            const card = document.createElement('div');
+            card.className = 'member-card';
+            
+            // Check if this is an advisor (no batch year)
+            const batchElement = member.batch 
+                ? `<div class="member-batch">Batch ${member.batch}</div>`
+                : '';
+            
+            card.innerHTML = `
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="${member.image}" alt="${member.name}">
+                        <div class="card-front-content">
+                            <div class="member-name">${member.name}</div>
+                            <div class="member-role">${member.role}</div>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <h3 class="member-name">${member.name}</h3>
+                        <div class="member-role">${member.role}</div>
+                        ${member.batch ? `<div class="member-batch">Batch ${member.batch}</div>` : ''}
+                        <div class="member-bio">${member.bio}</div>
+                        <div class="member-social">
+                            <a href="${member.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>
+                            <a href="${member.github}" target="_blank"><i class="fab fa-github"></i></a>
+                            <a href="mailto:${member.email}"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Render team members
+        function renderTeamMembers() {
+            const membersGrid = document.getElementById('members-grid');
+            const advisorsGrid = document.getElementById('advisors-grid');
+            
+            // Clear existing content
+            membersGrid.innerHTML = '';
+            advisorsGrid.innerHTML = '';
+            
+            // Render team members with animation
+            teamData.members.forEach((member, index) => {
+                const card = createMemberCard(member);
+                membersGrid.appendChild(card);
+                
+                // Initial state for animation
+                gsap.set(card, {
+                    opacity: 0,
+                    y: 50,
+                    rotationY: 10
+                });
+                
+                // Animate in
+                gsap.to(card, {
+                    opacity: 1,
+                    y: 0,
+                    rotationY: 0,
+                    duration: 0.8,
+                    delay: index * 0.1,
+                    ease: "power2.out"
+                });
+            });
+            
+            // Render faculty advisors with animation
+            teamData.advisors.forEach((advisor, index) => {
+                const card = createMemberCard(advisor);
+                advisorsGrid.appendChild(card);
+                
+                // Initial state for animation
+                gsap.set(card, {
+                    opacity: 0,
+                    y: 50,
+                    rotationX: 10
+                });
+                
+                // Animate in
+                gsap.to(card, {
+                    opacity: 1,
+                    y: 0,
+                    rotationX: 0,
+                    duration: 0.8,
+                    delay: index * 0.1,
+                    ease: "power2.out"
+                });
+            });
+        }
+
+        // Initialize background slideshow
+        function initSlideshow() {
+            const bgElement = document.querySelector('.background-slideshow');
+            let currentBgIndex = 0;
+            
+            // Preload images
+            backgroundImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+            
+            function changeBackground() {
+                // Fade out current background
+                gsap.to(bgElement, {
+                    opacity: 0,
+                    duration: 1,
+                    onComplete: () => {
+                        // Change background image
+                        currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                        bgElement.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
+                        
+                        // Fade in new background
+                        gsap.to(bgElement, {
+                            opacity: 1,
+                            duration: 1.5,
+                            ease: "power2.out"
+                        });
+                    }
+                });
+            }
+            
+            // Set initial background
+            bgElement.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
+            gsap.to(bgElement, { 
+                opacity: 1,
+                duration: 1 
+            });
+            
+            // Change background every 5 seconds
+            setInterval(changeBackground, 5000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize background slideshow
+            initSlideshow();
+            
+            // Render team members
+            renderTeamMembers();
+            
+            // Tab switching functionality
+            const tabs = document.querySelectorAll('.team-tab');
+            const containers = document.querySelectorAll('.team-container');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and containers
+                    tabs.forEach(t => t.classList.remove('active'));
+                    containers.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding container
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menu-toggle');
+            const nav = document.getElementById('nav');
+            
+            menuToggle.addEventListener('click', function() {
+                nav.classList.toggle('active');
+                menuToggle.innerHTML = nav.classList.contains('active') 
+                    ? '<i class="fas fa-times"></i>' 
+                    : '<i class="fas fa-bars"></i>';
+            });
+
+            // Close menu when clicking on a link
+            document.querySelectorAll('.nav a').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        nav.classList.remove('active');
+                        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                });
+            });
+
+            // Handle mobile click events for cards
+            if (window.innerWidth <= 768) {
+                document.querySelectorAll('.member-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        this.classList.toggle('flipped');
+                    });
+                });
+            }
+
+            // Header scroll effect
+            const header = document.querySelector('.header');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                // Switch between hover and click behavior based on screen size
+                const cards = document.querySelectorAll('.member-card');
+                cards.forEach(card => {
+                    // Remove all event listeners first
+                    card.replaceWith(card.cloneNode(true));
+                    
+                    if (window.innerWidth <= 768) {
+                        card.addEventListener('click', function() {
+                            this.classList.toggle('flipped');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
