@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,14 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;700&display=swap">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"
+        crossorigin="anonymous"></script>
     <style>
         /* ===== RESET & BASE STYLES ===== */
         :root {
             --primary-gradient: linear-gradient(45deg, #00f2fe, #4facfe);
             --text-gradient: linear-gradient(45deg, #ffffff, #b3e0ff);
-            --dark-overlay: linear-gradient(135deg, rgba(0,25,50,0.7) 0%, rgba(0,0,0,0.5) 100%);
+            --dark-overlay: linear-gradient(135deg, rgba(0, 25, 50, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
             --card-bg: rgba(255, 255, 255, 0.1);
             --transition-smooth: all 0.3s cubic-bezier(0.6, 1, 0.3, 1);
             --batch-color: rgba(0, 242, 254, 0.7);
@@ -168,7 +170,7 @@
             .menu-toggle {
                 display: block;
             }
-            
+
             .nav {
                 position: fixed;
                 top: 0;
@@ -183,21 +185,21 @@
                 transition: right 0.3s ease;
                 z-index: 100;
             }
-            
+
             .nav.active {
                 right: 0;
             }
-            
+
             .nav ul {
                 flex-direction: column;
                 align-items: center;
                 gap: 2rem;
             }
-            
+
             .header {
                 padding: 1.5rem 5%;
             }
-            
+
             .header.scrolled {
                 padding: 1rem 5%;
             }
@@ -276,10 +278,16 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
+        /* ===== TEAM MEMBERS GRID ===== */
         .team-grid {
             display: grid;
             margin-left: 80px;
@@ -290,7 +298,7 @@
             justify-items: center;
         }
 
-        /* ===== FLIP CARD STYLES ===== */
+        /* ===== FLIP CARD STYLES (for members only) ===== */
         .member-card {
             position: relative;
             width: 100%;
@@ -312,7 +320,8 @@
             transform: rotateY(180deg);
         }
 
-        .card-front, .card-back {
+        .card-front,
+        .card-back {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -350,7 +359,7 @@
             font-weight: 700;
             font-family: 'Roboto Slab', serif;
             margin-bottom: 5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .member-role {
@@ -403,44 +412,105 @@
             transform: translateY(-3px);
         }
 
-        /* ===== FOOTER ===== */
-        .footer {
-            text-align: center;
-            padding: 3rem 5%;
-            position: relative;
-            z-index: 5;
-            background: rgba(0, 10, 20, 0.7);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(0, 242, 254, 0.1);
-        }
-
-        .footer p {
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 1rem;
-        }
-
-        .footer-links {
+        /* ===== ADVISORS STYLES ===== */
+        .advisors-grid {
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
+            gap: 60px;
+            margin: 0 auto;
+            max-width: 800px;
         }
 
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: color 0.3s ease;
+        .advisor-card {
+            display: flex;
+            width: 100%;
+            background: rgba(0, 10, 20, 0.5);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 242, 254, 0.1);
+            transition: var(--transition-smooth);
         }
 
-        .footer-links a:hover {
+        .advisor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 242, 254, 0.2);
+            border-color: var(--batch-color);
+        }
+
+        .advisor-image {
+            width: 250px;
+            height: 350px;
+            flex-shrink: 0;
+            
+        }
+
+        .advisor-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.9);
+        }
+
+        .advisor-content {
+            padding: 30px;
+            flex-grow: 1;
+        }
+
+        .advisor-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
             color: #00f2fe;
+            font-family: 'Roboto Slab', serif;
+        }
+
+        .advisor-role {
+            font-size: 1.1rem;
+            color: #b3e0ff;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .advisor-bio {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+
+        .advisor-social {
+            display: flex;
+            gap: 15px;
+        }
+
+        .advisor-social a {
+            color: white;
+            font-size: 1.3rem;
+            transition: var(--transition-smooth);
+        }
+
+        .advisor-social a:hover {
+            color: #00f2fe;
+            transform: translateY(-3px);
         }
 
         /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 1200px) {
             .team-grid {
                 grid-template-columns: repeat(2, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .advisor-card {
+                flex-direction: column;
+            }
+
+            .advisor-image {
+                width: 100%;
+                height: 400px;
             }
         }
 
@@ -459,11 +529,11 @@
             .member-card {
                 perspective: none;
             }
-            
+
             .member-card .card-inner {
                 transition: transform 0.6s;
             }
-            
+
             .member-card.flipped .card-inner {
                 transform: rotateY(180deg);
             }
@@ -478,65 +548,68 @@
                 flex-direction: column;
                 align-items: center;
             }
+
+            .advisor-name {
+                font-size: 1.5rem;
+            }
+
+            .advisor-content {
+                padding: 20px;
+            }
         }
     </style>
 </head>
+
 <body>
     <script src="redirect.js"></script>
     <div class="background-slideshow"></div>
-    
+
     <header class="header">
         <div class="logo">
-            <h1>RIC</h1>
-            <span>Robotics Intelligence Centre</span>
+            <a href="home.html" style="text-decoration: none; color: inherit;">
+                <h1>RIC</h1>
+                <span>Robotics Intelligence Centre</span>
+            </a>
         </div>
-        
+
         <button class="menu-toggle" id="menu-toggle">
             <i class="fas fa-bars"></i>
         </button>
-        
+
         <nav class="nav" id="nav">
             <ul>
                 <li><a href="home.html">Home</a></li>
                 <li><a href="crewmembers.html" class="active">Crew Members</a></li>
                 <li><a href="projects.html">Projects</a></li>
                 <li><a href="Achivements.html">Achievements</a></li>
-               
             </ul>
         </nav>
     </header>
 
     <main class="crew-content">
         <div class="team-title">
-            <h2>Our Team</h2>
+            <h2>Our Workforce</h2>
             <div class="team-intro">
-                <p>The Robotics Intelligence Centre brings together brilliant minds from diverse disciplines to push the boundaries of intelligent robotics. Our team consists of passionate engineers, researchers, and innovators who collaborate to develop cutting-edge robotic solutions.</p>
+                <p>The Robotics Intelligence Centre brings together brilliant minds from diverse disciplines to push the
+                    boundaries of intelligent robotics. Our team consists of passionate engineers, researchers, and
+                    innovators who collaborate to develop cutting-edge robotic solutions.</p>
             </div>
         </div>
-        
+
         <div class="team-tabs">
             <div class="team-tab active" data-tab="members">Members</div>
             <div class="team-tab" data-tab="advisors">Faculty Advisors</div>
         </div>
-        
+
         <div class="team-container active" id="members">
             <div class="team-grid" id="members-grid"></div>
         </div>
-        
+
         <div class="team-container" id="advisors">
-            <div class="team-grid" id="advisors-grid"></div>
+            <div class="advisors-grid" id="advisors-grid"></div>
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="footer-links">
-            <a href="#">Research Papers</a>
-            <a href="#">Careers</a>
-            <a href="#">Partnerships</a>
-            <a href="#">Newsroom</a>
-        </div>
-        <p>&copy; 2023 Robotics Intelligence Centre. All rights reserved.</p>
-    </footer>
 
     <script>
         // Background images for slideshow
@@ -551,184 +624,202 @@
         const teamData = {
             members: [
                 {
-                    name: "Rahul",
-                    role: "Lead Robotics Engineer",
+                    name: "Rahul P",
+                    role: "Research Engineer",
                     batch: "2026",
-                    image: "images/im1.jpg",
-                    bio: "Expert in robotic systems integration with 10+ years of experience. Specializes in autonomous navigation and robotic manipulation. Developed our core robotic operating system.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
+                    image: "images/members/rahul.jpg",
+                    bio: "Research Engineer specializing in machine learning | Developing cutting-edge AI models and deploying scalable solutions at the intersection of theory and real-world impact.",
+                    linkedin: "https://www.linkedin.com/in/rahul-p-96399b203",
+                    github: "https://github.com/Rahul1511E",
+                    email: "rahul2903p@gmail.com",
+                    port_folio: "#"
                 },
                 {
-                    name: "Udhay karthick",
-                    role: "AI Research Scientist",
-                    batch: "2027",
-                    image: "",
-                    bio: "Expert in machine learning for robotic perception. Developed our award-winning object recognition system. Holds MSc in Computer Science from Stanford with focus on neural networks.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
+                    name: "Udhay Karthick C",
+                    role: "Robotics & Full Stack Engineer",
+                    batch: "2026",
+                    image: "/images/members/udhaykarthick.jpg",
+                    bio: "Robotics engineer crafting intelligent systems & full-stack developer building seamless digital experiences merging hardware and software to solve real-world challenges.",
+                    linkedin: "",
+                    github: "https://github.com/udhaykarthi",
+                    email: "udhaykarthik04@gmail.com",
+                    port_folio: "https://udhaykarthik04.netlify.app/udhaykarthik-portfolio"
                 },
                 {
-                    name: "Pravin Kumar",
-                    role: "Systems Architect",
-                    batch: "2025",
+                    name: "Pravin Kumar S",
+                    role: "Backend Engineer",
+                    batch: "2026",
                     image: "/images/members/pravin.jpg",
-                    bio: "Designs the core architecture for our robotic systems. Former SpaceX engineer with expertise in embedded systems and real-time computing. Leads our reliability engineering team.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
+                    bio: "Backend Engineer & MERN Stack Specialist | Architecting high-performance APIs and scalable systems with Node.js, MongoDB, and React.",
+                    linkedin: "https://www.linkedin.com/in/pravin-kumar-s-10a341267/",
+                    github: "https://github.com/pravinkumarspk",
+                    email: "pravinkumarbusiness7@gmail.com",
+                    port_folio: "#"
                 },
                 {
                     name: "Ramanidharan",
-                    role: "Human-Robot Interaction",
+                    role: "Robotics Structural Engineer",
                     batch: "2026",
                     image: "/images/members/ramani.jpg",
-                    bio: "Focuses on making robots more intuitive for human interaction. Psychology and robotics background. Developed our natural language interface and emotional recognition systems.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
+                    bio: "Robotics Structural Engineer | Designing mechanically intelligent systems that merge precision kinematics with robust structural integrity for next-gen automation.",
+                    linkedin: "https://www.linkedin.com/in/ramanidharan/",
+                    github: "https://github.com/Ramanidharan21",
+                    email: "ramanidharan21@gmail.com",
+                    port_folio: "#"
                 },
                 {
-                    name: "Sachin",
-                    role: "Computer Vision Specialist",
-                    batch: "2027",
+                    name: "Sachin K",
+                    role: "Data Scientist & Java Developer",
+                    batch: "2026",
                     image: "/images/members/sachin.jpg",
-                    bio: "Develops advanced computer vision algorithms for robotic navigation and object recognition. Previously worked on autonomous vehicle perception systems at Waymo.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
+                    bio: "Data Scientist & Java Developer | Building scalable AI solutions and robust backend systems to transform data into actionable intelligence.",
+                    linkedin: "http://www.linkedin.com/in/sachin-k-575520254",
+                    github: "https://github.com/sachin-183",
+                    email: "sachinkamaraj183@gmail.com",
+                    port_folio: "#"
                 },
-        
-            {
-                name: "Lakshimi Narayanan",
-                role: "Robotics Software Engineer",
-                batch: "2025",
-                image: "/images/members/d.jpg",
-                bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
-                linkedin: "#",
-                github: "#",
-                email: "#"
-            },  {
-                name: "Kishore T",
-                role: "Robotics Software Engineer",
-                batch: "2025",
-                image: "/images/members/d.jpg",
-                bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
-                linkedin: "#",
-                github: "#",
-                email: "#"
-            },
-            {
-                    name: "Phurnes",
-                    role: "Robotics Software Engineer",
-                    batch: "2025",
+                {
+                    name: "Lakshimi Narayanan S",
+                    role: "Full Stack Developer",
+                    batch: "2027",
+                    image: "/images/members/lakshiminarayanan.jpg",
+                    bio: "Machine Learning Engineer | Designing, training, and deploying intelligent systems at scale to solve real-world challenges.",
+                    linkedin: "https://www.linkedin.com/in/lachu-srinivasan-62ab6a2a2",
+                    github: "https://github.com/Lachu2826",
+                    email: "narayanan040605@gmail.com",
+                    port_folio: "#"
+                }, {
+                    name: "Kishore T",
+                    role: "Full Stack Developer",
+                    batch: "2027",
+                    image: "/images/members/kishoreT.jpg",
+                    bio: "Machine Learning Engineer | Designing, training, and deploying intelligent systems at scale to solve real-world challenges.",
+                    linkedin: "https://www.linkedin.com/in/kishore-t-7b28282a3/",
+                    github: "https://github.com/kishore9159",
+                    email: "kishorekeerthana0742@gmail.com,",
+                    port_folio: "#"
+                },
+                {
+                    name: "Phurnes M S",
+                    role: "Machine Learning Engineer",
+                    batch: "2027",
                     image: "/images/members/phurnes.jpg",
-                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
+                    bio: "Machine Learning Engineer | Designing, training, and deploying intelligent systems at scale to solve real-world challenges.",
+                    linkedin: "https://www.linkedin.com/in/phurnes-m-s-697880278/",
+                    github: "https://github.com/Phurnes",
+                    email: "msphurnes@gmail.com",
+                    port_folio: "#"
                 },
-                {
-                    name: "Sowmiya M",
-                    role: "Robotics Software Engineer",
-                    batch: "2025",
-                    image: "/images/members/sowmiya.jpg",
-                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
-                },
-                {
-                    name: "Preethi K",
-                    role: "Robotics Software Engineer",
-                    batch: "2025",
-                    image: "/images/members/preethi1.jpg",
-                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
-                },
-                
                 {
                     name: "Balahariharan S",
-                    role: "Robotics Software Engineer",
-                    batch: "2025",
+                    role: "Robotics Engineer",
+                    batch: "2027",
                     image: "/images/members/bala.jpg",
-                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
+                    bio: "Robotics Engineer | Designing intelligent autonomous systems that merge hardware, software, and AI to solve real-world challenges.",
+                    linkedin: "https://www.linkedin.com/in/balahariharan-s-44b8192a3/",
+                    github: "https://github.com/Balahariharan003",
+                    email: "balahariharan003@gmail.com",
+                    port_folio: "#"
                 },
                 {
-                    name: "Kavikumar",
-                    role: "Robotics Software Engineer",
-                    batch: "2025",
-                    image: "/images/members/kavi.jpg",
-                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
-                },   
-                {
-                    name: "Arunesh",
-                    role: "Robotics Software Engineer",
-                    batch: "2025",
+                    name: "Arunesh S S",
+                    role: "Robotics Engineer",
+                    batch: "2027",
                     image: "/images/members/arunesh.jpg",
-                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
+                    bio: "Robotics Engineer | Designing intelligent autonomous systems that merge hardware, software, and AI to solve real-world challenges.",
+                    linkedin: "https://www.linkedin.com/in/arunesh-s-s-04ab602a2/",
+                    github: "https://github.com/Arunesh062",
+                    email: "arunesharun062@gmail.com",
+                    port_folio: "#"
                 },
                 {
                     name: "Bharathkumar J A",
-                    role: "Robotics Software Engineer",
-                    batch: "2025",
-                    image: "/images/members/.jpg",
-                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
+                    role: "Data Scientist",
+                    batch: "2027",
+                    image: "/images/members/bharathkumar.jpg",
+                    bio: "Data Scientist | Leveraging data analytics and machine learning to drive insights and innovation.",
+                    linkedin: "https://www.linkedin.com/in/bharathkumar-j-a-41672928b/",
+                    github: "https://github.com/BHARATHKUMAR9081 ",
+                    email: "jabharathkumar94@gmail.com",
+                    port_folio: "#"
                 },
                 {
                     name: "Kishorekumar A",
-                    role: "Robotics Software Engineer",
-                    batch: "2025",
-                    image: "/images/members/d.jpg",
-                    bio: "Specializes in ROS development and robotic simulation. Created our virtual testing environment that reduced physical prototyping costs by 40%.",
-                    linkedin: "#",
+                    role: "Full Stack Developer",
+                    batch: "2027",
+                    image: "/images/members/kishorekumar.jpg",
+                    bio: "Full Stack Developer | Building seamless web applications with React, Node.js, and cloud technologies from concept to deployment.",
+                    linkedin: "https://www.linkedin.com/in/kishorekumar-a-951322299",
+                    github: "https://github.com/Kishorekumar-A",
+                    email: "kishorekumarcse100@gmail.com",
+                    port_folio: "#"
+                },
+                {
+                    name: "Kavikumar M",
+                    role: "Robotics Engineer",
+                    batch: "2027",
+                    image: "/images/members/kavi.jpg",
+                    bio: "Robotics Engineer | Designing intelligent autonomous systems that merge hardware, software, and AI to solve real-world challenges.",
+                    linkedin: "https://www.linkedin.com/in/kavikumar-m-425b682a2/",
+                    github: "https://github.com/kavikumar07",
+                    email: "kavikumar0703@gmail.commm",
+                    port_folio: "#"
+                },
+                {
+                    name: "Preethi K",
+                    role: "Full Stack Developer",
+                    batch: "2027",
+                    image: "/images/members/preethi1.jpg",
+                    bio: "Full Stack Developer | Building seamless web applications with React, Node.js, and cloud technologies from concept to deployment.",
+                    linkedin: "https://www.linkedin.com/in/preethi-kanagaraj-173b602a2/",
                     github: "#",
-                    email: "#"
+                    email: "preethiikanagaraj5@gmail.com",
+                    port_folio: "#"
+                },
+                    {
+    
+                        name: "Sowmiya M",
+                        role: "Backend Developer",
+                        batch: "2027",
+                        image: "/images/members/sowmiya.jpg",
+                        bio: "Backend Developer | Specializing in server-side development with Node.js, Express, and MongoDB.",
+                        linkedin: "https://www.linkedin.com/in/sowmiya-m-892301274/",
+                        github: "https://github.com/MSowmiya-12",
+                        email: " msowmiya822@gmail.com",
+                        port_folio: "#"
+                    },
+                {
+                    name: "Nandhana A K",
+                    role: "Research Engineer",
+                    batch: "2027",
+                    image: "/images/members/nandhana.jpg",
+                    bio: "Research Engineer | Focusing on innovative solutions in robotics and AI, bridging the gap between research and practical applications.",
+                    linkedin: "https://www.linkedin.com/in/nandhana-karthikeyan-15a19b2a4/",
+                    github: "https://github.com/nandhana88",
+                    email: "nandhanakarthikeyan8@gmail.com",
+                    port_folio: "#"
+                },
+                {
+                    name: "Deepika G",
+                    role: "Research Engineer",
+                    batch: "2027",
+                    image: "/images/members/deepika.jpg",
+                    bio: "Research Engineer | Focusing on innovative solutions in robotics and AI, bridging the gap between research and practical applications.",
+                    linkedin: "https://www.linkedin.com/in/deepika-g-096a24294 ",
+                    github: " https://github.com/DeepikaG19 ",
+                    email: " gdpika19@gmail.com ",
+                    port_folio: "#"
                 }
+
             ],
             advisors: [
                 {
-                    name: "Dr. Robert Langley",
-                    role: "Senior Faculty Advisor",
-                    image: "images/advisor1.jpg",
-                    bio: "Professor of Robotics at MIT with 25+ years experience in autonomous systems. Provides strategic guidance on our research directions and connects RIC with academic partners worldwide.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
-                },
-                {
-                    name: "Dr. Elena Petrova",
-                    role: "AI Research Advisor",
-                    image: "images/advisor2.jpg",
-                    bio: "Head of Computer Science Department at Stanford. Advises on our machine learning approaches and helps integrate the latest AI breakthroughs into our robotic systems.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
-                },
-                {
-                    name: "Dr. James Chen",
-                    role: "Mechanical Engineering Advisor",
-                    image: "images/advisor3.jpg",
-                    bio: "Professor of Mechanical Engineering at Caltech with expertise in robotic mechanisms and bio-inspired design. Guides our hardware development team.",
-                    linkedin: "#",
-                    github: "#",
-                    email: "#"
+                    name: "Dr. T. Rajasekaran",
+                    role: "Professor & Head of CSE ",
+                    image: "images/members/Rajasekaran.jpg",
+                    bio: "Dr. T. Rajasekaran holds a Ph.D. in Information and Communication Engineering from Anna University, Chennai, and completed his M.E. and B.E. in Computer Science and Engineering. He currently serves as a Professor at Nandha Engineering College, Erode, with over 13 years of academic experience and supervises six Ph.D. scholars under Anna University.",
+                    linkedin: "https://www.linkedin.com/in/dr-rajasekaran-thangaraj-657bb961/",
+                    email: "rajasekaran30@gmail.com "
                 }
             ]
         };
@@ -737,12 +828,7 @@
         function createMemberCard(member) {
             const card = document.createElement('div');
             card.className = 'member-card';
-            
-            // Check if this is an advisor (no batch year)
-            const batchElement = member.batch 
-                ? `<div class="member-batch">Batch ${member.batch}</div>`
-                : '';
-            
+
             card.innerHTML = `
                 <div class="card-inner">
                     <div class="card-front">
@@ -750,9 +836,11 @@
                         <div class="card-front-content">
                             <div class="member-name">${member.name}</div>
                             <div class="member-role">${member.role}</div>
+                            ${member.batch ? `<div class="member-batch">Batch ${member.batch}</div>` : ''}
                         </div>
                     </div>
                     <div class="card-back">
+                        <a href="${member.port_folio}" style="text-decoration: none; underline: none; color: inherit; rel="noopener noreferrer" target="_blank">
                         <h3 class="member-name">${member.name}</h3>
                         <div class="member-role">${member.role}</div>
                         ${member.batch ? `<div class="member-batch">Batch ${member.batch}</div>` : ''}
@@ -762,10 +850,35 @@
                             <a href="${member.github}" target="_blank"><i class="fab fa-github"></i></a>
                             <a href="mailto:${member.email}"><i class="fas fa-envelope"></i></a>
                         </div>
+                        </a>
                     </div>
                 </div>
             `;
-            
+
+            return card;
+        }
+
+        // Create advisor card
+        function createAdvisorCard(advisor) {
+            const card = document.createElement('div');
+            card.className = 'advisor-card';
+
+            card.innerHTML = `
+                <div class="advisor-image">
+                    <img src="${advisor.image}" alt="${advisor.name}">
+                </div>
+                <div class="advisor-content">
+                    <h3 class="advisor-name">${advisor.name}</h3>
+                    <div class="advisor-role">${advisor.role}</div>
+                    <div class="advisor-bio">${advisor.bio}</div>
+                    <div class="advisor-social">
+                        <a href="${advisor.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>
+                       
+                        <a href="mailto:${advisor.email}"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            `;
+
             return card;
         }
 
@@ -773,23 +886,23 @@
         function renderTeamMembers() {
             const membersGrid = document.getElementById('members-grid');
             const advisorsGrid = document.getElementById('advisors-grid');
-            
+
             // Clear existing content
             membersGrid.innerHTML = '';
             advisorsGrid.innerHTML = '';
-            
+
             // Render team members with animation
             teamData.members.forEach((member, index) => {
                 const card = createMemberCard(member);
                 membersGrid.appendChild(card);
-                
+
                 // Initial state for animation
                 gsap.set(card, {
                     opacity: 0,
                     y: 50,
                     rotationY: 10
                 });
-                
+
                 // Animate in
                 gsap.to(card, {
                     opacity: 1,
@@ -800,26 +913,24 @@
                     ease: "power2.out"
                 });
             });
-            
+
             // Render faculty advisors with animation
             teamData.advisors.forEach((advisor, index) => {
-                const card = createMemberCard(advisor);
+                const card = createAdvisorCard(advisor);
                 advisorsGrid.appendChild(card);
-                
+
                 // Initial state for animation
                 gsap.set(card, {
                     opacity: 0,
-                    y: 50,
-                    rotationX: 10
+                    y: 50
                 });
-                
+
                 // Animate in
                 gsap.to(card, {
                     opacity: 1,
                     y: 0,
-                    rotationX: 0,
                     duration: 0.8,
-                    delay: index * 0.1,
+                    delay: index * 0.2,
                     ease: "power2.out"
                 });
             });
@@ -829,13 +940,13 @@
         function initSlideshow() {
             const bgElement = document.querySelector('.background-slideshow');
             let currentBgIndex = 0;
-            
+
             // Preload images
             backgroundImages.forEach(src => {
                 const img = new Image();
                 img.src = src;
             });
-            
+
             function changeBackground() {
                 // Fade out current background
                 gsap.to(bgElement, {
@@ -845,7 +956,7 @@
                         // Change background image
                         currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
                         bgElement.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
-                        
+
                         // Fade in new background
                         gsap.to(bgElement, {
                             opacity: 1,
@@ -855,36 +966,36 @@
                     }
                 });
             }
-            
+
             // Set initial background
             bgElement.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
-            gsap.to(bgElement, { 
+            gsap.to(bgElement, {
                 opacity: 1,
-                duration: 1 
+                duration: 1
             });
-            
+
             // Change background every 5 seconds
             setInterval(changeBackground, 5000);
         }
 
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Initialize background slideshow
             initSlideshow();
-            
+
             // Render team members
             renderTeamMembers();
-            
+
             // Tab switching functionality
             const tabs = document.querySelectorAll('.team-tab');
             const containers = document.querySelectorAll('.team-container');
-            
+
             tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
+                tab.addEventListener('click', function () {
                     // Remove active class from all tabs and containers
                     tabs.forEach(t => t.classList.remove('active'));
                     containers.forEach(c => c.classList.remove('active'));
-                    
+
                     // Add active class to clicked tab and corresponding container
                     this.classList.add('active');
                     const tabId = this.getAttribute('data-tab');
@@ -895,17 +1006,17 @@
             // Mobile menu toggle
             const menuToggle = document.getElementById('menu-toggle');
             const nav = document.getElementById('nav');
-            
-            menuToggle.addEventListener('click', function() {
+
+            menuToggle.addEventListener('click', function () {
                 nav.classList.toggle('active');
-                menuToggle.innerHTML = nav.classList.contains('active') 
-                    ? '<i class="fas fa-times"></i>' 
+                menuToggle.innerHTML = nav.classList.contains('active')
+                    ? '<i class="fas fa-times"></i>'
                     : '<i class="fas fa-bars"></i>';
             });
 
             // Close menu when clicking on a link
             document.querySelectorAll('.nav a').forEach(link => {
-                link.addEventListener('click', function() {
+                link.addEventListener('click', function () {
                     if (window.innerWidth <= 768) {
                         nav.classList.remove('active');
                         menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
@@ -916,7 +1027,7 @@
             // Handle mobile click events for cards
             if (window.innerWidth <= 768) {
                 document.querySelectorAll('.member-card').forEach(card => {
-                    card.addEventListener('click', function() {
+                    card.addEventListener('click', function () {
                         this.classList.toggle('flipped');
                     });
                 });
@@ -924,7 +1035,7 @@
 
             // Header scroll effect
             const header = document.querySelector('.header');
-            window.addEventListener('scroll', function() {
+            window.addEventListener('scroll', function () {
                 if (window.scrollY > 50) {
                     header.classList.add('scrolled');
                 } else {
@@ -933,15 +1044,15 @@
             });
 
             // Handle window resize
-            window.addEventListener('resize', function() {
+            window.addEventListener('resize', function () {
                 // Switch between hover and click behavior based on screen size
                 const cards = document.querySelectorAll('.member-card');
                 cards.forEach(card => {
                     // Remove all event listeners first
                     card.replaceWith(card.cloneNode(true));
-                    
+
                     if (window.innerWidth <= 768) {
-                        card.addEventListener('click', function() {
+                        card.addEventListener('click', function () {
                             this.classList.toggle('flipped');
                         });
                     }
@@ -950,4 +1061,5 @@
         });
     </script>
 </body>
+
 </html>

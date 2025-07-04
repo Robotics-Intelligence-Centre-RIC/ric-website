@@ -7,12 +7,15 @@
     <title>RIC Projects - Robotics Intelligence Centre</title>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;700&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
     <style>
         /* ===== RESET & BASE STYLES ===== */
         :root {
             --primary-gradient: linear-gradient(45deg, #00f2fe, #4facfe);
             --text-gradient: linear-gradient(45deg, #ffffff, #b3e0ff);
-            --dark-overlay: linear-gradient(135deg, rgba(0,25,50,0.7) 0%, rgba(0,0,0,0.5) 100%);
+            --dark-overlay: linear-gradient(135deg, rgba(0, 25, 50, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
             --card-bg: rgba(255, 255, 255, 0.1);
             --transition-smooth: all 0.3s cubic-bezier(0.6, 1, 0.3, 1);
             --dark-bg: #121212;
@@ -36,7 +39,39 @@
             background: var(--dark-bg);
             overflow-x: hidden;
             line-height: 1.3;
-            padding-top: 100px; /* Account for fixed header */
+            padding-top: 100px;
+            /* Account for fixed header */
+        }
+
+        /* Background Slideshow */
+        .background-slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            filter: brightness(0.7) contrast(1);
+            transform: scale(1);
+            transform-origin: center center;
+            will-change: transform, opacity;
+            box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.3);
+        }
+
+        .background-slideshow.active {
+            opacity: 1;
+        }
+
+        .background-slideshow::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--dark-overlay);
+            z-index: 1;
         }
 
         /* ===== HEADER STYLES (UPDATED WITH MOBILE MENU) ===== */
@@ -51,13 +86,13 @@
             top: 0;
             z-index: 100;
             transition: var(--transition-smooth);
-            background: rgba(0, 10, 20, 0.7);
-            backdrop-filter: blur(10px);
+
         }
 
         .header.scrolled {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 10, 20, 0.7);
             padding: 1rem 5%;
-            height: 80px;
         }
 
         .logo {
@@ -138,7 +173,7 @@
             right: 0;
             top: 50%;
             transform: translateY(-50%);
-            width: 30px;
+            width: 20px;
             height: 3px;
             background: white;
             transition: all 0.3s ease;
@@ -148,7 +183,7 @@
         .menu-btn__burger::after {
             content: '';
             position: absolute;
-            width: 30px;
+            width: 20px;
             height: 3px;
             background: white;
             transition: all 0.3s ease;
@@ -178,10 +213,13 @@
 
         /* ===== PROJECTS PAGE SPECIFIC STYLES ===== */
         .page-header {
-            padding:40px;
+            padding: 40px;
             text-align: center;
-            backdrop-filter: blur(5px);
-            margin-top: 0px; /* Pull up to account for header */
+
+            margin-top: 0px;
+            /* Pull up to account for header */
+            position: relative;
+            z-index: 5;
         }
 
         .page-header h1 {
@@ -192,16 +230,20 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        .page-header p{
+
+        .page-header p {
             margin-left: 150px;
             margin-right: 150px;
         }
+
         .projects-container {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1%;
             display: flex;
             justify-content: center;
+            position: relative;
+            z-index: 5;
         }
 
         .projects-grid {
@@ -228,6 +270,7 @@
             transform: rotateY(180deg) scale(0.8) translateY(50px);
             animation: cardEntrance 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
             animation-delay: calc(var(--order) * 0.15s);
+
         }
 
 
@@ -236,6 +279,7 @@
                 opacity: 0;
                 transform: rotateY(180deg) scale(0.8) translateY(50px);
             }
+
             100% {
                 opacity: 1;
                 transform: rotateY(0) scale(1) translateY(0);
@@ -284,7 +328,7 @@
             right: 0;
             height: 100%;
             background: rgba(30, 30, 30, 0.95);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(18px);
             padding: 1.5rem;
             box-sizing: border-box;
             transform: scale(0);
@@ -293,7 +337,7 @@
             overflow: auto;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: top center;
             z-index: 3;
         }
 
@@ -306,7 +350,7 @@
             font-family: 'Roboto Slab', serif;
             color: #4facfe;
             font-size: 1rem;
-      
+
         }
 
         .project-meta {
@@ -360,41 +404,6 @@
             margin-left: 0.5rem;
         }
 
-        .footer {
-            text-align: center;
-            padding: 3rem 5%;
-            position: relative;
-            z-index: 5;
-            background: rgba(0, 10, 20, 0.7);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(0, 242, 254, 0.1);
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: #00f2fe;
-            text-decoration: underline;
-        }
-
-        .footer p {
-            margin: 0;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
 
         /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 1024px) {
@@ -419,8 +428,10 @@
             .nav ul {
                 position: fixed;
                 top: 0;
-                left: 0;
-                width: 100%;
+                right: 0;
+                /* Changed from left: 0 */
+                width: 70%;
+                /* Changed from 100% */
                 height: 100vh;
                 background: rgba(0, 10, 20, 0.95);
                 backdrop-filter: blur(10px);
@@ -429,6 +440,7 @@
                 align-items: center;
                 gap: 2rem;
                 transform: translateX(100%);
+                /* Start off-screen to the right */
                 transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
                 z-index: 100;
                 padding-top: 100px;
@@ -480,36 +492,44 @@
                 padding: 1.5rem;
             }
         }
+        
     </style>
 </head>
 
 <body>
-  <script src="redirect.js"></script>
+    <script src="redirect.js"></script>
+    <!-- Background Slideshow -->
+    <div class="background-slideshow"></div>
+
     <!-- Header with mobile menu -->
     <header class="header">
         <div class="logo">
-            <h1>RIC</h1>
-            <span>Robotics Intelligence Centre</span>
+            <a href="home.html" style="text-decoration: none; color: inherit;">
+                <h1>RIC</h1>
+                <span>Robotics Intelligence Centre</span>
+            </a>
         </div>
-        
+
         <div class="menu-btn">
             <div class="menu-btn__burger"></div>
         </div>
-        
+
         <nav class="nav">
             <ul>
                 <li><a href="home.html">Home</a></li>
                 <li><a href="crewmembers.html">Crew Members</a></li>
                 <li><a href="projects.html" class="active">Projects</a></li>
                 <li><a href="Achivements.html">Achievements</a></li>
-            
+
             </ul>
         </nav>
     </header>
 
     <section class="page-header">
         <h1>Our Innovative Projects</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam sint modi, ipsum animi, placeat, quam eligendi debitis sit dolorum eveniet quisquam odio fugit qui doloremque unde deserunt nihil. In, sit!</p>
+        <p>Explore our cutting-edge robotics projects that push the boundaries of artificial intelligence, automation,
+            and human-robot interaction. Each project represents our commitment to creating intelligent systems that
+            solve real-world challenges.</p>
     </section>
 
     <main class="projects-container">
@@ -518,98 +538,164 @@
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="footer-links">
-            <a href="#">About RIC</a>
-            <a href="#">Research Areas</a>
-            <a href="#">Publications</a>
-            <a href="#">Collaborations</a>
-            <a href="#">Contact</a>
-        </div>
-        <p>&copy; 2023 Robotics Intelligence Centre. All rights reserved.</p>
-    </footer>
+
 
     <script>
         // Project data
         const projects = [
             {
                 id: 1,
-                title: "Autonomous Industrial Manipulator",
-                category: "Industrial Robotics",
-                image: "https://images.unsplash.com/photo-1593491203371-2f45ef5c6eec?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-                description: "Developing vision-guided robotic arms for flexible manufacturing with self-learning capabilities to adapt to new tasks without reprogramming.",
-                year: "2022-Present"
+                title: "Automated Hydroponic Farming",
+                category: "Agriculture",
+                image: "images/projectImages/hydrophonic.jpg",
+                description: "Developing a semi-automated smart farming system that integrates both soil-based and hydroponic cultivation, utilizing IoT sensors for real-time monitoring and automated control of irrigation, nutrients, and environmental conditions to enhance sustainable agriculture.",
+                year: "2025-Present"
             },
             {
-                id: 2, 
-                title: "Urban Delivery Drone System",
-                category: "Autonomous Systems",
-                image: "https://images.unsplash.com/photo-1579829366248-204fe8413f31?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-                description: "Creating autonomous drone networks for last-mile delivery with obstacle avoidance and swarm coordination capabilities in urban environments.",
-                year: "2021-Present"
+                id: 2,
+                title: "Rove-E",
+                category: "Autonomous Rover",
+                image: "images/projectImages/rove-e.jpg",
+                description: "ROV-E is a ground-based intelligent rover equipped with a webcam and powered by YOLO-based object detection. It can identify people, interpret their actions, and generate brief scene descriptions in real-time. Designed for indoor surveillance—such as monitoring office spaces—it can also assist in post-disaster search operations by navigating through collapsed structures and detecting human presence beneath debris.",
+                year: "2024-Present"
             },
             {
                 id: 3,
-                title: "Surgical Assistance Robot",
-                category: "Medical Robotics",
-                image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-                description: "Developing a compact robotic system to assist surgeons with minimally invasive procedures through enhanced precision and tremor filtering.",
-                year: "2020-2023"
+                title: "Planto-Agricultural Robot",
+                category: "Agriculture",
+                image: "images/projectImages/AgriRover.jpg",
+                description: "Building a compact agricultural robot equipped with automated weed-cutting capabilities, utilizing a chain-driven mobility system and smart sensors to identify and remove unwanted crops efficiently in small to medium-scale farms.",
+                year: "2024-Present"
             },
             {
                 id: 4,
-                title: "Neuromorphic AI Processors",
-                category: "AI Research",
-                image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-                description: "Researching brain-inspired computing architectures for energy-efficient robotic control systems and real-time decision making.",
-                year: "2019-2022"
+                title: "Intelligent Security System",
+                category: "AI Research & Personal Security",
+                image: " images/projectImages/security.json",
+                description: "This AI-powered security system monitors live video feeds frame by frame to detect intruders with high accuracy. Using advanced object detection algorithms, it identifies unauthorized human presence in restricted areas and can trigger alerts in real time. Ideal for securing homes, offices, and sensitive facilities, the system offers a smart, automated alternative to traditional surveillance methods.",
+                year: "2024-Present",
+                isLottie: true
             },
             {
                 id: 5,
-                title: "Social Humanoid Platform",
-                category: "HRI",
-                image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-                description: "Developing expressive humanoid robots capable of natural social interactions through advanced facial expressions and gesture recognition.",
-                year: "2018-2021"
+                title: "RICA-Humanoid Robot",
+                category: "Education & Human-Robot Interaction",
+                image: "images/projectImages/rica-edurobot.jpg",
+                description: "Creating an interactive educational robot, RICA Edu, designed to function as an automated teacher with capabilities for voice-based communication, content delivery, and real-time interaction using speech recognition and synthesis for enhanced learning experiences.",
+                year: "2024-Present"
             },
             {
                 id: 6,
-                title: "Agricultural Robot",
-                category: "Autonomous Systems",
-                image: "https://images.unsplash.com/photo-1581093450021-4a7360e9a6a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+                title: "AI-Driven Security Drone",
+                category: "Autonomous Drones & Surveillance",
+                image: "images/projectImages/AI-driven-drone.jpg",
+                description: "An AI-driven drone capable of real-time hand gesture recognition for seamless, contactless control. It interprets user gestures to perform actions like takeoff, landing, and directional movement. The system eliminates the need for physical controllers, offering an intuitive flying experience. Ideal for applications in surveillance, delivery, and interactive robotics.",
+                year: "2023-2024"
+            },
+            {
+                id: 7,
+                title: "Spider Crawler",
+                category: "Rovers & Exploration",
+                image: "images/projectImages/spider_crawler.jpg",
                 description: "Creating rugged autonomous platforms for precision agriculture with computer vision for plant health monitoring and targeted treatment.",
-                year: "2017-2020"
+                year: "2023-2024"
+            },
+            {
+                id: 8,
+                title: "Pipe Crawler",
+                category: "Rovers & Exploration",
+                image: "images/projectImages/pipeCrawler.jpg",
+                description: "Developing an automated pipe crawler robot equipped with LiDAR sensors for navigating underground pipelines, capable of detecting internal damage, blockages, or holes with precision to ensure efficient inspection and maintenance.",
+                year: "2023-2024"
             }
         ];
+
+        // Background Slideshow Images
+        const backgroundImages = ['images/bg-images/pro1.jpg',
+            'images/bg-images/pro2.jpg',
+            'images/bg-images/pro3.jpg',
+            'images/bg-images/pro4.jpg',
+            'images/bg-images/pro5.jpg',
+            'images/bg-images/pro6.jpg',    
+            'images/bg-images/pro7.jpg',
+            'images/bg-images/pro8.jpg',
+            'images/bg-images/pro9.jpg',
+            'images/bg-images/pro10.jpg',
+            'images/bg-images/pro11.jpg'        ];
 
         // Render projects
         function renderProjects() {
             const container = document.getElementById('projects-container');
-            container.innerHTML = projects.map((project, index) => `
-                <div class="project-card" style="--order: ${index}">
-                    <div class="project-image-container" style="--bg-image: url('${project.image}')">
-                        <img src="${project.image}" alt="${project.title}" class="project-image">
-                    </div>
-                    
-                    <div class="project-content">
-                        <h3 class="project-title">${project.title}</h3>
-                        <div class="project-meta">
-                            <span class="project-category">${project.category}</span>
-                            <span class="project-date">${project.year}</span>
-                        </div>
-                        <p class="project-description">${project.description}</p>
-                        <a href="${project.id}.html" class="project-link">View Details</a>
-                    </div>
-                </div>
-            `).join('');
+            container.innerHTML = projects.map((project, index) => {
+                // Set background image for the blur effect
+                const bgStyle = project.isLottie ? '' : `style="--bg-image: url('${project.image}')"`;
 
-            // Apply the background images to the pseudo-elements
-            document.querySelectorAll('.project-image-container').forEach(container => {
-                const bgImage = container.style.getPropertyValue('--bg-image');
-                container.style.setProperty('--bg-image', bgImage);
-                container.querySelector('.project-image').onerror = function() {
-                    this.style.display = 'none';
-                };
+                return `
+                    <div class="project-card" style="--order: ${index}" ${bgStyle}>
+                        <div class="project-image-container">
+                            
+                            ${project.isLottie ?
+                        `<lottie-player 
+                                    src="${project.image}"
+                                    speed="1"  
+                                    style="width: 100%; height: 100%;background-color: white;"  
+                                    loop  
+                                    autoplay>
+                                </lottie-player>` :
+                                
+                        `<img src="${project.image}" alt="${project.title}" class="project-image">`
+                        
+                    }
+                        </div>
+                        
+                        <div class="project-content">
+                            <h3 class="project-title">${project.title}</h3>
+                            <div class="project-meta">
+                                <span class="project-category">${project.category}</span>
+                                <span class="project-date">${project.year}</span>
+                            </div>
+                            <p class="project-description">${project.description}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Add styles for the background blur effect
+            const style = document.createElement('style');
+            style.textContent = `
+                .project-image-container::before {
+                    background-image: var(--bg-image);
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Background Slideshow Functionality
+        let currentBgIndex = 0;
+        const bgElement = document.querySelector('.background-slideshow');
+
+        function changeBackground() {
+            // First, quickly fade out the current background
+            gsap.to(bgElement, {
+                duration: 0.5,
+                opacity: 0,
+                ease: "power2.in",
+                onComplete: () => {
+                    // Change the image
+                    currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+                    bgElement.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
+
+                    // Then zoom in from center (small to full size)
+                    gsap.fromTo(bgElement,
+                        { scale: 0.5, opacity: 0 },
+                        {
+                            duration: 1.5,
+                            scale: 1,
+                            opacity: 1,
+                            ease: "power2.out"
+                        }
+                    );
+                }
             });
         }
 
@@ -617,10 +703,25 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderProjects();
 
+            // Set initial background with zoom-in effect
+            bgElement.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
+            gsap.fromTo(bgElement,
+                { scale: 0.5, opacity: 0 },
+                {
+                    duration: 1.5,
+                    scale: 1,
+                    opacity: 1,
+                    ease: "power2.out"
+                }
+            );
+
+            // Start slideshow
+            const slideshowInterval = setInterval(changeBackground, 5000);
+
             // Mobile menu functionality
             const menuBtn = document.querySelector('.menu-btn');
             const nav = document.querySelector('.nav ul');
-            
+
             menuBtn.addEventListener('click', () => {
                 menuBtn.classList.toggle('open');
                 nav.classList.toggle('active');
@@ -637,12 +738,11 @@
             });
 
             // Header scroll effect
-            const header = document.querySelector('.header');
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
-                    header.classList.add('scrolled');
+                    document.querySelector('.header').classList.add('scrolled');
                 } else {
-                    header.classList.remove('scrolled');
+                    document.querySelector('.header').classList.remove('scrolled');
                 }
             });
 
@@ -651,11 +751,11 @@
             const animationDuration = 800;
             const delayBetweenCards = 150;
             const totalAnimationTime = (projects.length * delayBetweenCards) + animationDuration;
-            
+
             setTimeout(() => {
                 cards.forEach(card => {
                     card.classList.add('animated-in');
-                    
+
                     card.addEventListener('mousemove', (e) => {
                         const x = e.clientX - card.getBoundingClientRect().left;
                         const y = e.clientY - card.getBoundingClientRect().top;
@@ -686,4 +786,5 @@
         });
     </script>
 </body>
+
 </html>

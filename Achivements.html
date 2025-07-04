@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RIC - Achievements</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;700&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <style>
@@ -12,7 +14,7 @@
         :root {
             --primary-gradient: linear-gradient(45deg, #00f2fe, #4facfe);
             --text-gradient: linear-gradient(45deg, #ffffff, #b3e0ff);
-            --dark-overlay: linear-gradient(135deg, rgba(0,25,50,0.7) 0%, rgba(0,0,0,0.5) 100%);
+            --dark-overlay: linear-gradient(135deg, rgba(0, 25, 50, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
             --card-bg: rgba(255, 255, 255, 0.1);
             --transition-smooth: all 0.3s cubic-bezier(0.6, 1, 0.3, 1);
             --accent-color: #00f2fe;
@@ -35,7 +37,7 @@
             color: var(--text-color);
             background: #000000;
             overflow-x: hidden;
-            line-height: 1.6;
+            line-height: 1.3;
         }
 
         /* ===== BACKGROUND SLIDESHOW ===== */
@@ -78,16 +80,20 @@
             align-items: center;
             padding: 2rem 5%;
             position: fixed;
+
             width: 100%;
             height: 100px;
+            top: 0;
             z-index: 100;
             transition: var(--transition-smooth);
+
         }
 
         .header.scrolled {
             backdrop-filter: blur(10px);
-            background: rgba(0, 10, 20, 0.7);
             padding: 1rem 5%;
+            height: 80px;
+            background: rgba(0, 10, 20, 0.7);
         }
 
         .logo {
@@ -98,7 +104,7 @@
 
         .logo h1 {
             font-size: 2.5rem;
-            font-weight: 800;
+            font-weight: 1000;
             letter-spacing: 2px;
             background: var(--primary-gradient);
             -webkit-background-clip: text;
@@ -108,9 +114,51 @@
 
         .logo span {
             font-size: 0.9rem;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             color: rgba(255, 255, 255, 0.7);
         }
+
+        .nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 400;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover::after,
+        .nav a.active::after {
+            width: 100%;
+        }
+
+        .nav a.active {
+            color: #00f2fe;
+        }
+
 
         /* Mobile menu button */
         .menu-toggle {
@@ -169,7 +217,7 @@
             .menu-toggle {
                 display: block;
             }
-            
+
             .nav {
                 position: fixed;
                 top: 0;
@@ -184,21 +232,21 @@
                 transition: right 0.3s ease;
                 z-index: 100;
             }
-            
+
             .nav.active {
                 right: 0;
             }
-            
+
             .nav ul {
                 flex-direction: column;
                 align-items: center;
                 gap: 2rem;
             }
-            
+
             .header {
                 padding: 1.5rem 5%;
             }
-            
+
             .header.scrolled {
                 padding: 1rem 5%;
             }
@@ -297,7 +345,7 @@
             background: var(--card-bg);
             border-radius: 8px;
             padding: 2rem;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
             position: relative;
             border: 1px solid rgba(0, 242, 254, 0.2);
             transition: var(--transition-smooth);
@@ -383,49 +431,19 @@
                 opacity: 0;
                 transform: scale(1);
             }
+
             50% {
                 opacity: 0.8;
                 transform: scale(1.02);
             }
+
             100% {
                 opacity: 0;
                 transform: scale(1);
             }
         }
 
-        /* ===== FOOTER ===== */
-        .footer {
-            text-align: center;
-            padding: 3rem 5%;
-            position: relative;
-            z-index: 5;
-            background: rgba(0, 10, 20, 0.7);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(0, 242, 254, 0.1);
-        }
 
-        .footer p {
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent-color);
-        }
 
         /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 768px) {
@@ -436,7 +454,7 @@
             .timeline-line {
                 left: 30px;
             }
-            
+
             .milestone,
             .milestone:nth-child(even) {
                 width: calc(100% - 80px);
@@ -444,7 +462,7 @@
                 text-align: left;
                 padding: 0;
             }
-            
+
             .milestone-content {
                 margin-top: 0;
             }
@@ -467,33 +485,41 @@
             .milestone h3 {
                 font-size: 1.3rem;
             }
-            
+
             .milestone,
             .milestone:nth-child(even) {
                 width: calc(100% - 60px);
                 margin-left: 60px;
             }
-            
+
             .milestone-content {
                 padding: 1.5rem;
             }
         }
+        .logo a {
+            text-decoration: none;
+            color: inherit;
+            
+        }
     </style>
 </head>
+
 <body>
     <script src="redirect.js"></script>
     <div class="background-slideshow"></div>
-    
+
     <header class="header">
         <div class="logo">
-            <h1>RIC</h1>
-            <span>Robotics Intelligence Centre</span>
+            <a href="home.html">
+                <h1>RIC</h1>
+                <span>Robotics Intelligence Centre</span>
+            </a>
         </div>
-        
+
         <button class="menu-toggle" id="menu-toggle">
             <i class="fas fa-bars"></i>
         </button>
-        
+
         <nav class="nav" id="nav">
             <ul>
                 <li><a href="home.html">Home</a></li>
@@ -508,88 +534,106 @@
         <div class="section-title">
             <h2>Our Journey</h2>
             <div class="section-intro">
-                <p>At the Robotics Intelligence Centre, our passion for innovation and technology drives everything we do. Over the years, our dedication has earned us numerous accolades, reflecting our commitment to excellence in robotics and automation.</p>
+                <p>At the Robotics Intelligence Centre, our passion for innovation and technology drives everything we
+                    do. Over the years, our dedication has earned us numerous accolades, reflecting our commitment to
+                    excellence in robotics and automation.</p>
             </div>
         </div>
-        
+
         <div class="timeline-container">
             <div class="timeline-line"></div>
             <!-- Milestones will be dynamically inserted here -->
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="footer-links">
-            <a href="#">Research Papers</a>
-            <a href="#">Careers</a>
-            <a href="#">Partnerships</a>
-            <a href="#">Newsroom</a>
-        </div>
-        <p>&copy; 2023 Robotics Intelligence Centre. All rights reserved.</p>
-    </footer>
-
     <script>
         // Milestone data as objects
         const milestonesData = [
             {
-                title: "1st place in Sangam'25 - Industrial Automation",
-                description: "Pragyan'25, NIT Trichy",
-                icon: "fas fa-project-diagram",
-                date: "Project SLITHER | February 2025",
-                badges: ["1st Place", "Industrial Automation"]
+                title: "Tirupur Road Safety Hackathon '2023",
+                description: "Road Safety Innovation Challenge",
+                icon: "fas fa-car",
+                date: "2023",
+                badges: ["Finalist", "Road Safety"]
             },
             {
-                title: "Best Robotics Innovation Award",
-                description: "International Robotics Conference",
+                title: "Innovation Day '23 ",
+                description: "Innovative project presentation at Nandha Engineering College",
                 icon: "fas fa-trophy",
-                date: "Project AURORA | November 2024",
-                badges: ["Innovation", "Global"]
+                date: "2023",
+                badges: ["2nd Prize", "Innovation"]
             },
             {
-                title: "Technology Excellence Award",
-                description: "National Tech Symposium",
+                title: "Students Champions Award & Premier Project Team of NEC",
+                description: "CIPD - Innovation Day '24",
+                icon: "fas fa-award",
+                date: "2024",
+                badges: ["Champions", "Premier Team"]
+            },
+            {
+                title: "Innovation Day '24 Best Unique Project Award",
+                description: "Innovative project presentation at Nandha Engineering College",
                 icon: "fas fa-medal",
-                date: "Project HELIX | March 2023",
-                badges: ["Excellence", "Research"]
+                date: "2024",
+                badges: ["Unique Project", "Award"]
             },
             {
-                title: "AI Research Grant Award",
-                description: "Department of Science & Technology",
-                icon: "fas fa-microscope",
-                date: "Project NEURON | September 2022",
-                badges: ["Research", "Grant"]
+                title: "4th in International GPU Computing Hackathon",
+                description: "NVIDIA & IIT Roorkee",
+                icon: "fas fa-microchip",
+                date: "2024",
+                badges: ["International", "GPU Computing"]
             },
             {
-                title: "Young Innovators Recognition",
-                description: "TechStars Startup Week",
+                title: "Finalist - TN State Math-Tech Innovation Hackathon '25",
+                description: "Tamil Nadu Government",
+                icon: "fas fa-laptop-code",
+                date: "2025",
+                badges: ["Finalist", "Math-Tech"]
+            },
+            {
+                title: "Uyir Road Safety Hackathon '2025 - Finalist",
+                description: "Road Safety Innovation Challenge",
+                icon: "fas fa-traffic-light",
+                date: "2025",
+                badges: ["Finalist", "Road Safety"]
+            },
+            {
+                title: "Innovation Day '25 Unique Project Award",
+                description: "NIT Trichy",
                 icon: "fas fa-lightbulb",
-                date: "Project SPARK | May 2021",
-                badges: ["Startup", "Recognition"]
+                date: "2025",
+                badges: ["Unique Project", "Award"]
             }
+
         ];
 
         // Background images for slideshow
         const backgroundImages = [
-            'images/im1.jpg',
-            'images/im2.jpg',
-            'images/im3.jpg',
-            'images/im4.jpg'
+            'images/bg-images/ach8.jpg',
+            'images/bg-images/ach1.jpg',
+            'images/bg-images/ach2.jpg',
+            'images/bg-images/ach6.jpg',
+            'images/bg-images/ach3.jpg',
+            'images/bg-images/ach7.jpg',
+            'images/bg-images/ach4.jpg',
+            'images/bg-images/ach5.jpg',
         ];
 
         // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Initialize background slideshow
             initSlideshow();
-            
+
             // Generate milestones from data
             generateMilestones();
-            
+
             // Set up scroll animation for milestones
             setupScrollAnimations();
-            
+
             // Header scroll effect
             const header = document.querySelector('.header');
-            window.addEventListener('scroll', function() {
+            window.addEventListener('scroll', function () {
                 if (window.scrollY > 50) {
                     header.classList.add('scrolled');
                 } else {
@@ -600,17 +644,17 @@
             // Mobile menu toggle
             const menuToggle = document.getElementById('menu-toggle');
             const nav = document.getElementById('nav');
-            
-            menuToggle.addEventListener('click', function() {
+
+            menuToggle.addEventListener('click', function () {
                 nav.classList.toggle('active');
-                menuToggle.innerHTML = nav.classList.contains('active') 
-                    ? '<i class="fas fa-times"></i>' 
+                menuToggle.innerHTML = nav.classList.contains('active')
+                    ? '<i class="fas fa-times"></i>'
                     : '<i class="fas fa-bars"></i>';
             });
 
             // Close menu when clicking on a link
             document.querySelectorAll('.nav a').forEach(link => {
-                link.addEventListener('click', function() {
+                link.addEventListener('click', function () {
                     if (window.innerWidth <= 768) {
                         nav.classList.remove('active');
                         menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
@@ -618,20 +662,20 @@
                 });
             });
         });
-        
+
         // Generate milestones from data
         function generateMilestones() {
             const timelineContainer = document.querySelector('.timeline-container');
-            
+
             milestonesData.forEach((milestone, index) => {
                 const milestoneElement = document.createElement('div');
                 milestoneElement.className = `milestone ${index % 2 === 0 ? 'odd' : 'even'}`;
-                
+
                 // Create badges HTML
-                const badgesHTML = milestone.badges.map(badge => 
+                const badgesHTML = milestone.badges.map(badge =>
                     `<span class="milestone-badge">${badge}</span>`
                 ).join('');
-                
+
                 milestoneElement.innerHTML = `
                     <div class="milestone-content">
                         <h3>${milestone.title}</h3>
@@ -643,50 +687,50 @@
                         ${badgesHTML}
                     </div>
                 `;
-                
+
                 timelineContainer.appendChild(milestoneElement);
             });
         }
-        
+
         // Set up scroll animations for milestones
         function setupScrollAnimations() {
             const milestones = document.querySelectorAll('.milestone');
             const timelineLine = document.querySelector('.timeline-line');
-            
+
             // Function to check if element is in center viewport
             function isInCenterViewport(el) {
                 const rect = el.getBoundingClientRect();
                 const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
                 const elementTop = rect.top;
                 const elementBottom = rect.bottom;
-                
+
                 // Check if element is in the center 60% of the viewport
                 return (
                     elementTop <= viewportHeight * 0.7 &&
                     elementBottom >= viewportHeight * 0.3
                 );
             }
-            
+
             // Function to handle scroll events
             function handleScroll() {
                 milestones.forEach((milestone, index) => {
                     if (isInCenterViewport(milestone) && !milestone.classList.contains('active')) {
                         milestone.classList.add('active');
-                        
+
                         // Animate the milestone
                         gsap.to(milestone, {
                             opacity: 1,
                             y: 0,
                             duration: 0.8,
                             ease: "power2.out",
-                            onComplete: function() {
+                            onComplete: function () {
                                 // Animate the dot
                                 gsap.to(milestone.querySelector('::after'), {
                                     scale: 1,
                                     duration: 0.5,
                                     ease: "back.out"
                                 });
-                                
+
                                 // Animate timeline glow if last milestone
                                 if (index === milestones.length - 1) {
                                     animateTimelineGlow();
@@ -696,18 +740,18 @@
                     }
                 });
             }
-            
+
             // Initial check in case some milestones are already visible
             handleScroll();
-            
+
             // Add scroll event listener
             window.addEventListener('scroll', handleScroll);
         }
-        
+
         // Animate timeline glow effect
         function animateTimelineGlow() {
             const timelineLine = document.querySelector('.timeline-line');
-            
+
             // Create glow element
             const glow = document.createElement('div');
             glow.className = 'timeline-glow';
@@ -720,9 +764,9 @@
             glow.style.zIndex = '2';
             glow.style.opacity = '0';
             glow.style.transformOrigin = 'center';
-            
+
             timelineLine.appendChild(glow);
-            
+
             // Animate glow
             gsap.to(glow, {
                 opacity: 0.8,
@@ -733,7 +777,7 @@
                 onComplete: () => {
                     // Remove glow element after animation
                     timelineLine.removeChild(glow);
-                    
+
                     // Continuous subtle pulse
                     gsap.to(timelineLine, {
                         boxShadow: '0 0 15px rgba(0, 242, 254, 0.7)',
@@ -745,18 +789,18 @@
                 }
             });
         }
-        
+
         // Initialize background slideshow
         function initSlideshow() {
             const bgElement = document.querySelector('.background-slideshow');
             let currentBgIndex = 0;
-            
+
             // Preload images
             backgroundImages.forEach(src => {
                 const img = new Image();
                 img.src = src;
             });
-            
+
             function changeBackground() {
                 // Fade out current background
                 gsap.to(bgElement, {
@@ -766,7 +810,7 @@
                         // Change background image
                         currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
                         bgElement.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
-                        
+
                         // Fade in new background
                         gsap.to(bgElement, {
                             opacity: 1,
@@ -776,17 +820,18 @@
                     }
                 });
             }
-            
+
             // Set initial background
             bgElement.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
-            gsap.to(bgElement, { 
+            gsap.to(bgElement, {
                 opacity: 1,
-                duration: 1 
+                duration: 1
             });
-            
+
             // Change background every 5 seconds
             setInterval(changeBackground, 5000);
         }
     </script>
 </body>
+
 </html>
